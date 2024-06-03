@@ -1,74 +1,109 @@
 package main
 
 import (
+	crudproduct "Projects/N11/crudProduct"
+	crudusers "Projects/N11/crudUser"
+	"database/sql"
+	"fmt"
 
-	postgress "example.com/n11/postgres"
+	_ "github.com/lib/pq"
 )
 
-func main() {
-	_, err := postgress.ConnectDB()
+func main(){
+	db,err:=sql.Open("postgres","postgres://postgres:salom@localhost:5432/n11?sslmode=disable")
+	if err!=nil{
+		panic(err)
+	}
+	defer db.Close()
 
-	if err != nil {
+	tr,err:=db.Begin()
+	if  err!=nil {
 		panic(err)
 	}
 
-	_, err = postgress.Insert("Ozodbek", "Shamsiddinov", "ozodbek@gmail.com", "12345", 19, "Golang and python", "Male", true)
-	if err != nil {
+	defer tr.Commit()
+
+	u:=crudusers.NewCrudUsersRepo(db)
+	p:=crudproduct.NewCrudProductRepo(db)
+
+	// _,err=u.Insertuser("Ozodbek","ozodbek@gmail.com","ozodbek")
+	// if err!=nil{
+	// 	panic(err)
+	// }
+
+	// _,err=u.Insertuser("Azizbek","aziz123@gmail.com","azizbek123")
+	// if err!=nil{
+	// 	panic(err)
+	// }
+
+	// _,err=u.Insertuser("Abbos","abbos2321@gmail.com","abbos2321")
+	// if err!=nil{
+	// 	panic(err)
+	// }
+
+	// _,err=u.Insertuser("Saidazim","saidazim12@gmail.com","saidazim12")
+	// if err!=nil{
+	// 	panic(err)
+	// }
+
+	// _,err=u.Insertuser("Asilbek","asilbek1911@gmail.com","asilbek1911")
+	// if err!=nil{
+	// 	panic(err)
+	// }
+
+	// _,err=p.Insertproduct("Laptop", "High-performance laptop with 16GB RAM and 512GB SSD", 1299.99, 50)
+	// if err!=nil{
+	// 	panic(err)
+	// }
+
+	// _,err=p.Insertproduct("Smartphone", "Latest model smartphone with 5G support and 128GB storage", 799.49, 150)
+	// if err!=nil{
+	// 	panic(err)
+	// }
+
+	// _,err=p.Insertproduct("Headphones", "Wireless noise-cancelling headphones with 30-hour battery life", 199.95, 200)
+	// if err!=nil{
+	// 	panic(err)
+	// }
+
+	// _,err=p.Insertproduct("Smartwatch", "Smartwatch with heart rate monitor and GPS", 149.99, 100)
+	// if err!=nil{
+	// 	panic(err)
+	// }
+
+	// _,err=p.Insertproduct("Tablet", "10-inch tablet with 64GB storage and 8MP camera", 349.99, 80)
+	// if err!=nil{
+	// 	panic(err)
+	// }
+
+	// getuser,_:=u.Readuser()
+	// fmt.Println(getuser)
+
+	// fmt.Println()
+
+	getproduct,_:=p.GetProduct()
+	fmt.Println(getproduct)
+
+	_,err=u.UpdateUser("ozodbek1235",1)
+	if err!=nil{
 		panic(err)
 	}
 
-	_, err = postgress.Insert("Saidazim", "Qilichov", "saidazim@gmail.com", "54321", 18, "Golang", "Male", false)
-	if err != nil {
+	_,err=p.Updateproduct(2,"Tablet1232")
+	if err!=nil{
+		fmt.Println("salom")
 		panic(err)
 	}
 
-	_, err = postgress.Insert("Akbar", "Akbarov", "akbar@gmail.com", "012", 20, ".net", "Male", true)
-	if err != nil {
+	_,err=u.Deleteuser(3)
+	if err!=nil{
+		fmt.Println("salom1")
 		panic(err)
 	}
 
-	_, err = postgress.Insert("Asilbek", "Asilbekov", "asilbek@gmail.com", "1911", 16, "python", "Male", false)
-	if err != nil {
-		panic(err)
-	}
-
-	_, err = postgress.Insert("Abbos", "Abbosbekov", "Abbos@gmail.com", "a123", 24, "Flutter", "Male", true)
-	if err != nil {
-		panic(err)
-	}
-
-	_, err = postgress.Insert("Nigini", "Abdusalimov", "nigini@gmail.com", "n12354", 17, "Dezayner", "Female", false)
-	if err != nil {
-		panic(err)
-	}
-
-	_, err = postgress.Insert("Ali", "Alijonov", "ali@gmail.com", "aa45", 19, "python", "Male", false)
-	if err != nil {
-		panic(err)
-	}
-
-	_, err = postgress.Insert("Aziz", "Mansurov", "aziz@gmail.com", "aziz12", 23, "Golang", "Male", true)
-	if err != nil {
-		panic(err)
-	}
-
-	_, err = postgress.Insert("Maruf", "Mansurov", "maruf@gmail.com", "maruf12", 23, "Golanf and python", "Male", false)
-	if err != nil {
-		panic(err)
-	}
-
-	_, err = postgress.Insert("Umidjon", "Husenov", "umid@gmail.com", "umid", 20, "dezayner", "Male", true)
-	if err != nil {
-		panic(err)
-	}
-
-	_, err = postgress.Insert("Ravshan", "Ravshanov", "ravshan@gmail.com", "ravshan", 15, "c++", "Male", false)
-	if err != nil {
-		panic(err)
-	}
-
-	_, err = postgress.Insert("Hasan", "Hasanboyev", "hasan@gmail.com", "hasan", 28, "Java", "Male", true)
-	if err != nil {
+	_,err=p.Deleteproduct(5)
+	if err!=nil{
+		fmt.Println("salom2")
 		panic(err)
 	}
 }
